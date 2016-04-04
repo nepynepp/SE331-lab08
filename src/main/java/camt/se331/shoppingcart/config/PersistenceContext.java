@@ -32,6 +32,7 @@ import java.util.Properties;
  *
  * @author Petri Kainulainen
  */
+
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
 @EnableJpaRepositories("camt.se331.shoppingcart.repository")

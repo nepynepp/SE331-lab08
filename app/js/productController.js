@@ -7,14 +7,19 @@ productMainController.controller('addProductController', ['$scope', '$http', '$l
         $scope.product = {};
         $scope.addPerson = true;
         $scope.editPerson = false;
-        $scope.addProduct = function () {
+        $scope.addProduct = function (flowFiles) {
+            productService.save($scope.product, function (data){
+                var productid = data.id;
+                flowFiles.opts.target = 'http://localhost:8080/productImage/add';
+                flowFiles.opts.testChunks = false;
+                flowFiles.opts.query = {productid:productid};
+                flowFiles.upload();
 
-            //$http.post("/product", $scope.product).success(function () {
-            productService.save($scope.product,function(){
-                $rootScope.addSuccess = true;
-                $location.path("listProduct");
+            })
+            $rootScope.addSuccess = true;
+            $location.path("listProduct");
+            $scope.$apply();
 
-            });
         };
 
 
@@ -62,11 +67,17 @@ productMainController.controller('editProductController', ['$scope', '$http', '$
             $scope.product = data;
         });
 
-        $scope.editProduct = function () {
+        $scope.editProduct = function (flowFiles) {
             //$http.put("/product", $scope.product).then(function () {
-            productService.update({id:$scope.product.id},$scope.product,function(){
+                productService.update({id:$scope.product.id},$scope.product,function(data){
+                var productid = data.id;
+                flowFiles.opts.target = 'http://localhost:8080/productImage/add';
+                flowFiles.opts.testChunks = false;
+                flowFiles.opts.query ={productid:productid};
+                flowFiles.upload();
                 $rootScope.editSuccess = true;
                 $location.path("listProduct");
+                $scope.$apply();
             });
         }
     }]);

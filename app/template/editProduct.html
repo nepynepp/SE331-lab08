@@ -6,7 +6,7 @@
         <h1>Edit Product</h1>
     </div>
     <div class="col-md-4">
-        <form name="editform" novalidate>
+        <form name="editform" novalidate flow-init>
             <div class="form-group">
                 <!-- Sidebar content-->
                 <label for="productname">name :</label>
@@ -34,12 +34,23 @@
                 <label for="productprice">price :</label>
                 <input ng-model="product.totalPrice" name="productprice" class="form-control" id="productprice"
                        placeholder="price" type="number" required/>
-
                 <div class="alert alert-danger" role="alert" ng-show="editform.productprice.$error.required">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     <span class="sr-only">Error:</span>
                     Price is Required!
                 </div>
+
+                <div>
+                    <input type="file" flow-btn />
+                    <table>
+                        <tr ng-repeat="file in $flow.files">
+                            <td> {{$index+1}} </td>
+                            <td> {{file.name}}</td>
+                            <td><img flow-img="$flow.files[{{$index}}]"> </td>
+                        </tr>
+                    </table>
+                </div>
+
                 <div class="alert alert-danger" role="alert" ng-show="editform.productprice.$error.number">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     <span class="sr-only">Error:</span>
@@ -49,8 +60,8 @@
             </div>
 
 
-            <button type="submit" class="btn btn-default" ng-click="addProduct()" ng-show="addPerson">Add</button>
-            <button type="submit" class="btn btn-default" ng-click="editProduct()" ng-show="editPerson">Edit</button>
+            <button type="submit" class="btn btn-default" ng-click="addProduct($flow)" ng-show="addPerson">Add</button>
+            <button type="submit" class="btn btn-default" ng-click="editProduct($flow)" ng-show="editPerson">Edit</button>
         </form>
     </div>
 </div>

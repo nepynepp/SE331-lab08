@@ -19,9 +19,6 @@ import java.io.IOException;
 
 public class WebAppInitializer implements WebApplicationInitializer {
 
-
-
-
     String basicConfig = "classpath:/setup.properties";
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
