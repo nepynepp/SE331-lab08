@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.HTMLDocument;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -21,7 +23,6 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProducts() {
         return productDao.getProducts();
     }
-
 
 
     @Override
@@ -54,6 +55,20 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public Product addImage(Product product, Image image) {
         product.getImages().add(image);
+        productDao.updateProduct(product);
+        return product;
+    }
+
+    @Override
+    @Transactional
+    public Product removeImage(Product product,Long id){
+        Iterator<Image> imgitr = product.getImages().iterator();
+        while (imgitr.hasNext()){
+            Image img = imgitr.next();
+            if(img.getId().intValue() == id.intValue()){
+                product.getImages().remove(img);
+            }
+        }
         productDao.updateProduct(product);
         return product;
     }

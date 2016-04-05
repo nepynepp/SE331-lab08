@@ -63,13 +63,20 @@ productMainController.controller('editProductController', ['$scope', '$http', '$
         $scope.addPerson = false;
         $scope.editPerson = true;
         var id = $routeParams.id;
-        $http.get("/product/" + id).success(function (data) {
+        $http.get("http://localhost:8080/product/" + id).success(function (data) {
             $scope.product = data;
         });
 
         $scope.editProduct = function (flowFiles) {
             //$http.put("/product", $scope.product).then(function () {
-                productService.update({id:$scope.product.id},$scope.product,function(data){
+                var pd = angular.copy($scope.product);
+            //pd.images = [];
+            productService.update({
+                id:$scope.product.id,
+                name:$scope.product.name,
+                description:$scope.product.description,
+                totalPrice:$scope.product.totalPrice
+            },function(data){
                 var productid = data.id;
                 flowFiles.opts.target = 'http://localhost:8080/productImage/add';
                 flowFiles.opts.testChunks = false;
@@ -77,7 +84,19 @@ productMainController.controller('editProductController', ['$scope', '$http', '$
                 flowFiles.upload();
                 $rootScope.editSuccess = true;
                 $location.path("listProduct");
-                $scope.$apply();
             });
+        }
+        $scope.removeImage = function (pdId, imgId) {
+            var r = confirm("Are you sure?");
+            if (r == true) {
+                $http.delete("http://localhost:8080/productImage/remove?productid="+pdId+"&imageid="
+                    +imgId).then(function(){
+                    $http.get("http://localhost:8080/product/" + pdId).success(function(data){
+                        $scope.product = data;
+                    });
+                }, function(){
+                    console.log("FAILED");
+                });
+            }
         }
     }]);
